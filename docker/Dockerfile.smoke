@@ -1,0 +1,10 @@
+FROM oven/bun:1.4.2@sha256:9114c058aeae42162ee16dd5084b95fe9473970bb6bcb5b232ab1630f0546895
+
+ENV CI=1 \
+    TZ=UTC \
+    BUN_RUNTIME_TRANSPILER_CACHE_PATH=0
+
+USER bun
+WORKDIR /tmp/work
+
+CMD ["bun", "--version"]

@@ -1,0 +1,21 @@
+FROM oven/bun:1.4.2@sha256:9114c058aeae42162ee16dd5084b95fe9473970bb6bcb5b232ab1630f0546895 AS bunbin
+FROM emscripten/emsdk@sha256:e077d54e2b8970575ebc4f185ac1de0b95c05f2b266134d4ba27449af7aebf65
+
+COPY --from=bunbin /usr/local/bin/bun /usr/local/bin/bun
+
+ENV TZ=UTC \
+    LC_ALL=C.UTF-8 \
+    WRANGLER_SEND_METRICS=false \
+    BUN_INSTALL_GLOBAL_DIR=/usr/local/lib/bun \
+    BUN_INSTALL_BIN=/usr/local/bin \
+    BUN_INSTALL_CACHE_DIR=/tmp/bun-cache
+RUN bun add --global wrangler@4.123.0 typescript@7.0.2 \
+    && wrangler --version \
+    && tsc --version \
+    && rm -rf /tmp/bun-cache
+
+RUN useradd --create-home --uid 10001 consumer
+USER 10001:10001
+WORKDIR /tmp/work
+
+CMD ["wrangler", "--version"]

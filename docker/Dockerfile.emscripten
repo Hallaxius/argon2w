@@ -1,0 +1,10 @@
+FROM emscripten/emsdk@sha256:e077d54e2b8970575ebc4f185ac1de0b95c05f2b266134d4ba27449af7aebf65
+
+ENV TZ=UTC \
+    LC_ALL=C.UTF-8
+
+RUN useradd --create-home --uid 10001 builder
+USER 10001:10001
+WORKDIR /tmp/work
+
+CMD ["node", "--version"]

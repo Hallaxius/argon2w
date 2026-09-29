@@ -1,0 +1,30 @@
+services:
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    command: ["bun", "test"]
+    init: true
+    network_mode: none
+    read_only: true
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,size=128m
+    volumes:
+      - type: bind
+        source: ./coverage
+        target: /workspace/coverage
+        bind:
+          create_host_path: false
+    user: "${TEST_UID:-1000}:${TEST_GID:-1000}"
+    environment:
+      CI: "1"
+      TZ: UTC
+      HOME: /tmp
+      BUN_RUNTIME_TRANSPILER_CACHE_PATH: "0"
+    cpus: 2.0
+    mem_limit: 1g
+    pids_limit: 128
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true

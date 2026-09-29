@@ -1,0 +1,4 @@
+# Normalize text files; keep Wasm byte-identical on every checkout.
+* text=auto
+*.wasm binary
+*.tgz binary

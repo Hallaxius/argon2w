@@ -1,0 +1,113 @@
+
+x-common: &common
+  network_mode: none
+  read_only: true
+  tmpfs:
+    - /tmp:rw,nosuid,nodev,exec,size=512m
+  volumes:
+    - type: bind
+      source: .
+      target: /repo
+      read_only: true
+      bind:
+        create_host_path: false
+  user: "10001:10001"
+  environment:
+    TZ: UTC
+    HOME: /tmp
+  init: true
+  pids_limit: 128
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges:true
+
+services:
+  native-tests:
+    <<: *common
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.native
+    command: ["sh", "/repo/docker/run-native-tests.sh"]
+    cpus: 4.0
+    mem_limit: 2g
+
+  native-sanitizers:
+    <<: *common
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.native
+    command: ["sh", "/repo/docker/run-sanitizers.sh"]
+    cpus: 4.0
+    mem_limit: 2g
+
+  upstream-large-ram:
+    <<: *common
+    profiles: ["large"]
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.native
+    command: ["sh", "-c", "rm -rf /tmp/lg && mkdir -p /tmp/lg && cp -r /repo/upstream/phc-winner-argon2 /tmp/lg/up && cd /tmp/lg/up && make testci CC=gcc"]
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,exec,size=3072m
+    cpus: 4.0
+    mem_limit: 4g
+
+  emscripten-build:
+    <<: *common
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.emscripten
+    command: ["sh", "/repo/docker/run-emscripten-build.sh"]
+    environment:
+      TZ: UTC
+      HOME: /tmp
+      EM_CACHE: /tmp/emcache
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,exec,size=512m
+      - /emsdk/upstream/emscripten/cache:rw,nosuid,nodev,exec,size=512m
+    cpus: 4.0
+    mem_limit: 2g
+
+  wasm-tests:
+    <<: *common
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.emscripten
+    command: ["sh", "/repo/docker/run-wasm-tests.sh"]
+    environment:
+      TZ: UTC
+      HOME: /tmp
+      EM_CACHE: /tmp/emcache
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,exec,size=512m
+      - /emsdk/upstream/emscripten/cache:rw,nosuid,nodev,exec,size=512m
+    cpus: 2.0
+    mem_limit: 1g
+
+  phc-fuzz-smoke:
+    <<: *common
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.native
+    command: ["sh", "/repo/docker/run-fuzz-smoke.sh"]
+    cpus: 2.0
+    mem_limit: 1g
+
+  bun-consumer:
+    <<: *common
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.consumer
+    command: ["sh", "/repo/docker/run-bun-consumer.sh"]
+    cpus: 2.0
+    mem_limit: 2g
+
+  resource-smoke:
+    <<: *common
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.smoke
+    command: ["sh", "/repo/docker/run-resource-smoke.sh"]
+    cpus: 2.0
+    mem_limit: 1g

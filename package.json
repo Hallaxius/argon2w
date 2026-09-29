@@ -1,0 +1,54 @@
+{
+  "name": "@hallaxius/argon2w",
+  "version": "0.0.1",
+  "description": "Argon2id for Cloudflare Workers: official P-H-C implementation compiled to SIMD Wasm, serial lanes, explicit cost parameters.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json",
+    "./dist/argon2w.wasm": "./dist/argon2w.wasm"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && bun scripts/copy-wasm.ts",
+    "prepack": "bun run build",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "argon2",
+    "argon2id",
+    "password-hashing",
+    "cloudflare-workers",
+    "workerd",
+    "wasm"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hallaxius/argon2w.git"
+  },
+  "homepage": "https://github.com/Hallaxius/argon2w#readme",
+  "bugs": {
+    "url": "https://github.com/Hallaxius/argon2w/issues"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/bun": "1.4.2",
+    "typescript": "7.0.2"
+  }
+}
