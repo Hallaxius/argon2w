@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
         with:
           bun-version: "1.4.2"
@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
         with:
           bun-version: "1.4.2"
@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - run: docker info
       - run: docker compose -f compose.argon2.yaml config
       - run: docker compose -f compose.test.yaml config
@@ -52,7 +52,7 @@ jobs:
     timeout-minutes: 30
     needs: compose-config
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - run: docker compose -f compose.argon2.yaml run --rm --build --no-deps native-tests
 
   native-sanitizers:
@@ -60,7 +60,7 @@ jobs:
     timeout-minutes: 30
     needs: compose-config
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - run: docker compose -f compose.argon2.yaml run --rm --build --no-deps native-sanitizers
 
   emscripten-build:
@@ -68,7 +68,7 @@ jobs:
     timeout-minutes: 30
     needs: compose-config
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - run: docker compose -f compose.argon2.yaml run --rm --build --no-deps emscripten-build
 
   wasm-tests:
@@ -76,7 +76,7 @@ jobs:
     timeout-minutes: 30
     needs: compose-config
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - run: docker compose -f compose.argon2.yaml run --rm --build --no-deps wasm-tests
 
   phc-fuzz-smoke:
@@ -84,7 +84,7 @@ jobs:
     timeout-minutes: 30
     needs: compose-config
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - run: docker compose -f compose.argon2.yaml run --rm --build --no-deps phc-fuzz-smoke
 
   bun-consumer:
@@ -92,7 +92,7 @@ jobs:
     timeout-minutes: 30
     needs: compose-config
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - run: docker compose -f compose.argon2.yaml run --rm --build --no-deps bun-consumer
 
   resource-smoke:
@@ -100,7 +100,7 @@ jobs:
     timeout-minutes: 30
     needs: compose-config
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - run: docker compose -f compose.argon2.yaml run --rm --build --no-deps resource-smoke
 
   upstream-large-ram:
@@ -109,5 +109,5 @@ jobs:
     needs: compose-config
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - run: docker compose -f compose.argon2.yaml --profile large run --rm --build --no-deps upstream-large-ram
