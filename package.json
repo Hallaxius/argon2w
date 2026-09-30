@@ -1,7 +1,7 @@
 {
   "name": "@hallaxius/argon2w",
   "version": "0.0.2",
-  "description": "Argon2id for Cloudflare Workers: official P-H-C implementation compiled to SIMD Wasm, serial lanes, explicit cost parameters.",
+  "description": "Argon2id password hashing for Cloudflare Workers and Node.js, built on the PHC reference implementation compiled to standalone SIMD WebAssembly.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -33,9 +33,14 @@
     "argon2",
     "argon2id",
     "password-hashing",
+    "password-security",
     "cloudflare-workers",
+    "nodejs",
     "workerd",
-    "wasm"
+    "wasm",
+    "webassembly",
+    "typescript",
+    "cryptography"
   ],
   "license": "Apache-2.0",
   "repository": {

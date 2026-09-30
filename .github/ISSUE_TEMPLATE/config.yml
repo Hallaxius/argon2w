@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and usage help
+    url: https://github.com/Hallaxius/argon2w/discussions
+    about: Ask usage questions and share deployment guidance in Discussions.
+  - name: Security vulnerability
+    url: https://github.com/Hallaxius/argon2w/security/advisories/new
+    about: Report vulnerabilities privately; do not open a public issue.

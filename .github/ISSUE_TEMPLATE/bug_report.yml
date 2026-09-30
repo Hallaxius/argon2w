@@ -1,0 +1,48 @@
+name: Bug report
+description: Report a reproducible issue with argon2w.
+title: "bug: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Share a minimal reproduction. Never include real passwords, production PHC strings, secrets, or customer data.
+  - type: input
+    id: version
+    attributes:
+      label: argon2w version
+      description: Which package version are you using?
+      placeholder: 0.0.2
+    validations:
+      required: true
+  - type: dropdown
+    id: runtime
+    attributes:
+      label: Runtime
+      options:
+        - Node.js
+        - Cloudflare Workers
+        - Bun
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Include the parameters and a minimal code sample using synthetic values.
+      render: javascript
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include the error message or observed result, with sensitive values removed.
+    validations:
+      required: true

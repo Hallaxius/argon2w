@@ -1,14 +1,28 @@
 # argon2w
 
-Argon2id password hashing for Cloudflare Workers and Node.js, built on the official PHC Argon2 implementation compiled to a standalone SIMD WebAssembly module. It returns PHC strings for storage and verifies them without a native addon.
+[![npm version](https://img.shields.io/npm/v/%40hallaxius%2Fargon2w?label=npm)](https://www.npmjs.com/package/@hallaxius/argon2w)
+[![CI](https://img.shields.io/github/actions/workflow/status/Hallaxius/argon2w/ci.yaml?branch=main&label=CI)](https://github.com/Hallaxius/argon2w/actions/workflows/ci.yaml)
+[![Apache-2.0 license](https://img.shields.io/github/license/Hallaxius/argon2w)](LICENSE)
+
+Argon2id password hashing for **Cloudflare Workers and Node.js**. Built on the PHC Argon2 reference implementation compiled to a standalone SIMD WebAssembly module, argon2w returns standard PHC strings for storage and verifies them without a native addon.
+
+### Highlights
+
+- **Portable:** use the same async API in Node.js 24+ and Cloudflare Workers.
+- **No native addon or runtime dependencies:** the compiled `.wasm` ships with the package; consumers do not need Bun or Emscripten.
+- **PHC-compatible:** hashes use the standard Argon2id PHC string format and a fresh random salt by default.
+- **Explicit costs:** named profiles, custom parameters, bounded verification, and rehash assessment are available.
 
 ## Install
 
 ```sh
-bun add @hallaxius/argon2w
+npm install @hallaxius/argon2w
+# or: pnpm add @hallaxius/argon2w
+# or: yarn add @hallaxius/argon2w
+# or: bun add @hallaxius/argon2w
 ```
 
-Zero runtime dependencies. The compiled `.wasm` file ships inside the package; you do not need Emscripten or Bun to use it. The package is ESM only — there is no CommonJS build, so use `import` or a dynamic `import()` from CommonJS code.
+The package is ESM-only; there is no CommonJS build, so use `import` or a dynamic `import()` from CommonJS code.
 
 ## Hash and verify
 
@@ -26,6 +40,10 @@ Store `encoded` as the password verifier, never the password itself.
 `hash()` generates a fresh 16-byte salt unless you supply one. Its defaults are `m=19456` KiB, `t=3`, `p=1`, with a 32-byte tag. The result is an Argon2id v=19 (`0x13`) PHC string — store the entire string.
 
 `verify()` returns `false` for a wrong password, a malformed PHC string, or one exceeding the configured cost limits. Invalid API arguments and internal failures can throw, so handle errors at your application boundary.
+
+## Node.js
+
+Node.js 24 or newer loads the packaged `.wasm` asset automatically. The `hash()` and `verify()` example above works without calling `configureWasm()`; configure it only when the automatic file-based fallback is unavailable.
 
 ## Profiles
 
@@ -109,7 +127,7 @@ Hash when setting a password and verify a *stored* PHC string when authenticatin
 
 `configureWasm()` also accepts raw Wasm bytes (`Uint8Array`) and starts instantiation eagerly, so the first call does not pay compilation. Call it once during module initialization. `resetWasmCache()` discards a cached instance after an out-of-band trap; the normal entry points already reset themselves on trap-class failures.
 
-On Node.js the `.wasm` file is loaded from disk automatically, so `configureWasm()` is only needed when that fallback is unavailable.
+See [Node.js](#nodejs) for the automatic file-based Wasm loading behavior in Node.
 
 ## Choosing costs
 
@@ -178,4 +196,6 @@ The exported `MIN_*` / `MAX_*` constants describe the JavaScript boundaries. The
 
 ## Reporting issues
 
-[Issues](https://github.com/Hallaxius/argon2w/issues) are the place for reproducible failures. Include your runtime, the parameters you used, and a minimal test case — without real passwords or stored PHC strings.
+Use [Discussions](https://github.com/Hallaxius/argon2w/discussions) for questions and deployment guidance. Use [Issues](https://github.com/Hallaxius/argon2w/issues) for reproducible failures; include your runtime, the parameters you used, and a minimal test case — without real passwords or stored PHC strings.
+
+For contribution setup and local checks, see [CONTRIBUTING.md](CONTRIBUTING.md). To report a security vulnerability, follow [SECURITY.md](SECURITY.md) rather than opening a public issue.
