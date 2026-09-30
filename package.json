@@ -1,6 +1,6 @@
 {
   "name": "@hallaxius/argon2w",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Argon2id for Cloudflare Workers: official P-H-C implementation compiled to SIMD Wasm, serial lanes, explicit cost parameters.",
   "type": "module",
   "main": "./dist/index.js",
@@ -9,6 +9,11 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./wasm": {
+      "types": "./dist/wasm-asset.d.ts",
+      "workerd": "./dist/wasm-entry.js",
+      "default": "./dist/argon2w.wasm"
     },
     "./package.json": "./package.json",
     "./dist/argon2w.wasm": "./dist/argon2w.wasm"

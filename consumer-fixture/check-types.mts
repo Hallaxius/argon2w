@@ -1,4 +1,7 @@
 import { assessRehash, createProfile, hash, hashRaw, needsRehash, profiles, verify } from "@hallaxius/argon2w";
+import type wasmModule from "@hallaxius/argon2w/wasm";
+
+const wasmTypeCheck: typeof wasmModule | undefined = undefined;
 
 async function main(): Promise<void> {
   const encoded: string = await hash("type-check-pw", {

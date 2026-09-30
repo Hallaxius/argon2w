@@ -1,6 +1,12 @@
 import { hash, verify } from "@hallaxius/argon2w";
-if (!import.meta.resolve('@hallaxius/argon2w/dist/argon2w.wasm').endsWith('/argon2w.wasm')) {
-  throw new Error('Wasm subpath resolution failed');
+
+for (const specifier of [
+  "@hallaxius/argon2w/wasm",
+  "@hallaxius/argon2w/dist/argon2w.wasm",
+]) {
+  if (!import.meta.resolve(specifier).endsWith("/dist/argon2w.wasm")) {
+    throw new Error(`Wasm subpath resolution failed: ${specifier}`);
+  }
 }
 
 const encoded = await hash("type-check-pw", {

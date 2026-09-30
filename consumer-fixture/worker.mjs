@@ -1,4 +1,4 @@
-import wasmModule from "@hallaxius/argon2w/dist/argon2w.wasm";
+import wasmModule from "@hallaxius/argon2w/wasm";
 import {
   assessRehash,
   bytesToHex,

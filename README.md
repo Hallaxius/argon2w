@@ -76,10 +76,10 @@ const assessment = assessRehash(encoded, "standard");
 
 ## Cloudflare Workers
 
-Import the Wasm subpath and configure it once at startup. The subpath resolves to a `WebAssembly.Module`:
+Import the public Wasm subpath and configure it once at startup. The subpath resolves to a `WebAssembly.Module`:
 
 ```js
-import argon2Wasm from "@hallaxius/argon2w/dist/argon2w.wasm";
+import argon2Wasm from "@hallaxius/argon2w/wasm";
 import { configureWasm, hash, verify } from "@hallaxius/argon2w";
 
 configureWasm(argon2Wasm);
@@ -92,14 +92,18 @@ export default {
 };
 ```
 
-In TypeScript, add a module declaration for the `.wasm` subpath in your project, for example `src/wasm.d.ts`:
+Wrangler's default module rules load `.wasm` imports as compiled Wasm modules, so no extra rule is needed in a standard Worker config. If you define custom module rules that shadow the defaults, preserve a `CompiledWasm` rule for the package asset:
 
-```ts
-declare module "*.wasm" {
-  const module: WebAssembly.Module;
-  export default module;
-}
+```toml
+[[rules]]
+type = "CompiledWasm"
+globs = ["**/*.wasm"]
+fallthrough = true
 ```
+
+The previous `@hallaxius/argon2w/dist/argon2w.wasm` path remains available as a compatibility alias; new code should use `/wasm` instead of depending on the package's internal `dist` layout.
+
+The package includes a TypeScript declaration for `@hallaxius/argon2w/wasm`, so no project-local module declaration is needed with a resolver that honors package `exports`. Wrangler resolves the `workerd` export to a small wrapper that imports the Wasm asset relatively.
 
 Hash when setting a password and verify a *stored* PHC string when authenticating. Do not hash on every request.
 
